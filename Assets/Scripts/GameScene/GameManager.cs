@@ -8,16 +8,16 @@ public abstract class GameManager : MonoBehaviour
 {
     [SerializeField] private Text rankingText;
     [SerializeField] private Text guideText;
-    [HideInInspector] public int score = 0;
+    [HideInInspector] public int score = 0;     //スコア
     [SerializeField] private Text scoreText;
-    protected float duration = 0;
+    protected float duration = 0;               //経過時間
     [SerializeField] protected Text durationText;
-    private int life = 3;
+    private int life = 3;                       //ライフ
     [SerializeField] private Text lifeText;
-    private List<int> destroyedEnemy = new(){0, 0, 0};
-    [HideInInspector] public int skillPoint = 0;
+    private List<int> destroyedEnemy = new(){0, 0, 0};  //撃破した敵の数(強さ別)
+    [HideInInspector] public int skillPoint = 0;        //SP
     [SerializeField] private Slider spSlider;
-    public static bool isPause = true;
+    public static bool isPause = true;                  //ポーズ中かどうか
     private bool isStart = false;
     [SerializeField] private GameObject black;
     [SerializeField] protected RectTransform enemyParent;

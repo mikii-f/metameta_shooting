@@ -7,12 +7,12 @@ using UnityEngine.UI;
 public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected GameObject images;
-    protected RectTransform parentRect;   //親の座標
-    protected RectTransform myRect;   //親を基準とした、敵機自体の座標 (これら二つを分けることで、「下に移動しつつ円運動」とかを実現しやすくする)
-    protected int hp;
-    protected EnemyLevel enemyLevel;
+    protected RectTransform parentRect; //親の座標
+    protected RectTransform myRect;     //親を基準とした、敵機自体の座標 (これら二つを分けることで、「下に移動しつつ円運動」とかを実現しやすくする)
+    protected int hp;                   //体力
+    protected EnemyLevel enemyLevel;    //自身のレベル
     protected Image[] myImages;
-    protected RectTransform enemyParent;
+    protected RectTransform enemyParent;    //弾丸のInstantiate先
     
     private void OnTriggerEnter2D(Collider2D bullet)
     {
