@@ -32,9 +32,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        intervalCount += Time.deltaTime;
         if (!GameManager.isPause)
         {
             Move();
+            bullet();
         }
     }
     private void Move()
@@ -96,7 +98,16 @@ public class Player : MonoBehaviour
             semiCircle.color = Color.clear;
         }
     }
+    private void bullet()
+    {
+        if (intervalCount >= interval)
+        {
+            intervalCount = 0;
+            GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
+            newBullet.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition;
 
+        }
+    }
     public void Skill1()
     {
 
