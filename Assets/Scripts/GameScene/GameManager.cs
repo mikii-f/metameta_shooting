@@ -61,7 +61,8 @@ public abstract class GameManager : MonoBehaviour
 
     public void Damaged()
     {
-
+        life = life-1;
+        lifeText.text = "×" + life.ToString();
     }
     public void DestroyEnemy(EnemyLevel enemyLevel)
     {

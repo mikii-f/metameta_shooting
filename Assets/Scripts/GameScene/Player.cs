@@ -112,7 +112,16 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D enemy)
     {
         //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
+        if (enemy.CompareTag("Enemy") || enemy.CompareTag("EnemyBullet"))
+        {
+            gameManager.Damaged();
+            StartCoroutine(Damaged());
+        }
         //弾丸の場合はその弾丸をDestroy
+        if(enemy.CompareTag("EnemyBullet"))
+        {
+            Destroy(enemy.gameObject);
+        }
     }
     //ダメージを受けた時の点滅及び無敵時間
     private IEnumerator Damaged()
