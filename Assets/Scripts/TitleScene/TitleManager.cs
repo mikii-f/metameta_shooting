@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 public class TitleManager : MonoBehaviour
 {
     [SerializeField] private GameObject tutorialPanel;
+    [SerializeField] private GameObject EasyPanel;
+    [SerializeField] private GameObject NormalPanel;
+    [SerializeField] private GameObject HardPanel;
     [SerializeField] private GameObject black;
     // Start is called before the first frame update
     void Start()
@@ -17,7 +20,9 @@ public class TitleManager : MonoBehaviour
 
     public void GameStart()
     {
-
+        EasyPanel.SetActive(true);
+        NormalPanel.SetActive(true);
+        HardPanel.SetActive(true);
     }
 
     //「遊び方」を押したら遊び方説明パネルを表示する
@@ -33,19 +38,22 @@ public class TitleManager : MonoBehaviour
     public void Close()
     {
         tutorialPanel.SetActive(false);
+        EasyPanel.SetActive(false);
+        NormalPanel.SetActive(false);
+        HardPanel.SetActive(false);
     }
 
     public void Easy()
     {
-
+        SceneManager.LoadScene("EasyScene");
     }
     public void Normal()
     {
-
+         SceneManager.LoadScene("NormalScene");
     }
     public void Hard()
     {
-
+         SceneManager.LoadScene("HardScene");
     }
     private IEnumerator SceneChange(string scene)
     {
