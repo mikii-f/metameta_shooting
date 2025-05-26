@@ -5,9 +5,13 @@ using UnityEngine;
 //GameManagerを継承し、難易度「難しい」のゲームを管理する
 public class Hard : GameManager
 {
-    // Update is called once per frame
-    void Update()
+    private bool test = true;   //テスト用
+    protected override void Algorithm()
     {
-        
+        if (test)
+        {
+            GenerateEnemy2_0(0);
+            test = false;
+        }
     }
 }

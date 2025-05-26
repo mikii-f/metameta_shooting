@@ -8,12 +8,13 @@ public class Manager : MonoBehaviour
     public static int level; //選択した難易度
     public static List<List<int>> enemyComposition = new(){new(){20, 2, 0}, new(){30, 8, 1}, new(){50, 15, 3}}; //各難易度の敵構成(例)
     public static Result result; //その回のゲームのプレイ結果
+    public static int gameWidth = 320;
 
     //ゲームの結果として使用する情報をまとめて保持する
     public class Result
     {
         public int score;       //スコア
-        public int duration;    //生存時間
+        public float duration;    //生存時間
         public List<int> destroyedEnemy;    //撃破した敵の数(強さ別)
     }
 
