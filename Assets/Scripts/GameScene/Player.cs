@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,9 +14,6 @@ public class Player : MonoBehaviour
     private RectTransform semiCircleRect;
     [SerializeField] private RectTransform bulletParent;    //弾丸の複製先(親オブジェクト)
     [SerializeField] private GameManager gameManager;   //GameManagrへのアクセス用
-    private bool isSkill1 = false;
-    private bool isSkill2 = false;
-    private bool isSkill3 = false;
     [SerializeField] private float playerSpeed = 600;
     private float interval = 0.1f;      //弾丸発射の間隔
     private float intervalCount = 0;    //intervalの計測用
@@ -36,7 +32,20 @@ public class Player : MonoBehaviour
         if (!GameManager.isPause)
         {
             Move();
-            bullet();
+            //スキル1発動中の場合、intervalの半分までカウントしたら発射
+
+
+            //スキル1未発動の場合、intervalまでカウントしたら発射
+
+            if (intervalCount >= interval)
+            {
+                intervalCount = 0;
+                //ダメージを受けた直後、ゲーム終了後は撃たない
+                if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                {
+                    Bullet();
+                }
+            }
         }
     }
     private void Move()
@@ -49,7 +58,10 @@ public class Player : MonoBehaviour
                                                             //右下の操作マーク(画面中心を原点とする座標において、(x, y)=(660, -360))が操作の中心となるように補正
             mousePosition.x -= 1620;
             mousePosition.y -= 180;
-            angle = Mathf.Atan2(mousePosition.y, mousePosition.x);
+            if (Mathf.Pow(Mathf.Pow(mousePosition.x, 2) + Mathf.Pow(mousePosition.y, 2), 0.5f) < 400)
+            {
+                angle = Mathf.Atan2(mousePosition.y, mousePosition.x);
+            }
         }
         //矢印キーでの操作への対応
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.UpArrow))
@@ -87,7 +99,7 @@ public class Player : MonoBehaviour
         //プレイヤーの入力を受け付け、angleの値が変更されていたらその方向に移動
         if (angle >= -100)
         {
-            float newX = Mathf.Clamp(playerRect.anchoredPosition.x + playerSpeed * Mathf.Cos(angle) * Time.deltaTime, -320, 320);
+            float newX = Mathf.Clamp(playerRect.anchoredPosition.x + playerSpeed * Mathf.Cos(angle) * Time.deltaTime, -Manager.gameWidth, Manager.gameWidth);
             float newY = Mathf.Clamp(playerRect.anchoredPosition.y + playerSpeed * Mathf.Sin(angle) * Time.deltaTime, -520, 480);
             playerRect.anchoredPosition = new(newX, newY);
             semiCircle.color = new(1, 1, 1, 0.5f);
@@ -98,40 +110,51 @@ public class Player : MonoBehaviour
             semiCircle.color = Color.clear;
         }
     }
-    private void bullet()
+    private void Bullet()
     {
-        if (intervalCount >= interval)
-        {
-            intervalCount = 0;
-            GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
-            newBullet.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition;
+        GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
+        newBullet.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition + new Vector2(0, 50);
+        //スキル2発動中の場合、追加で角度π/3, 2π/3の方向にも弾丸を発射(Enemy0_1.csの50行目付近を参考)
 
+    }
+    
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!gameManager.finishButton.activeSelf)
+        {
+            //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
+            if (collision.CompareTag("Enemy") || collision.CompareTag("EnemyBullet"))
+            {
+                if (gameManager.Damaged() == 0)
+                {
+                    StartCoroutine(Damaged());
+                }
+                else
+                {
+                    StartCoroutine(Destroyed());
+                }
+            }
+            //弾丸の場合はその弾丸をDestroy
+            if (collision.CompareTag("EnemyBullet"))
+            {
+                Destroy(collision.gameObject);
+            }
         }
-    }
-    public void Skill1()
-    {
-
-    }
-    public void Skill2()
-    {
-
-    }
-    public void Skill3()
-    {
-
-    }
-    private void OnTriggerEnter2D(Collider2D enemy)
-    {
-        //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
-        if (enemy.CompareTag("Enemy") || enemy.CompareTag("EnemyBullet"))
+        if (collision.CompareTag("Word"))
         {
-            gameManager.Damaged();
-            StartCoroutine(Damaged());
-        }
-        //弾丸の場合はその弾丸をDestroy
-        if(enemy.CompareTag("EnemyBullet"))
-        {
-            Destroy(enemy.gameObject);
+            //色やScaleに応じたスコア増減処理
+            Text t = collision.GetComponent<Text>();
+            //テキストが「メタ」以外であった場合-250点
+
+
+            //テキストがメタであった場合
+            //テキストのカラーがオレンジの場合+1000点
+
+            //テキストのスケールが小さい場合+1000点
+
+            //それ以外の場合+500点
+
+            Destroy(collision.gameObject);
         }
     }
     //ダメージを受けた時の点滅及び無敵時間
@@ -150,6 +173,19 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         ColorChange(defaultColor);
         playerCollider.enabled = true;
+    }
+    private IEnumerator Destroyed()
+    {
+        playerCollider.enabled = false;
+        ColorChange(Color.clear);
+        yield return new WaitForSeconds(0.25f);
+        ColorChange(defaultColor);
+        yield return new WaitForSeconds(0.25f);
+        ColorChange(Color.clear);
+        yield return new WaitForSeconds(0.25f);
+        ColorChange(defaultColor);
+        yield return new WaitForSeconds(0.25f);
+        ColorChange(Color.clear);
     }
     private void ColorChange(Color color)
     {
