@@ -18,6 +18,7 @@ public class Enemy0_2 : Enemy
     // Update is called once per frame
     void Update()
     {
+        isBulletCollision = false;
         if (GameManager.isPause == false)
         {
         }

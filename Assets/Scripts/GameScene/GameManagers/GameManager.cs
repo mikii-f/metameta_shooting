@@ -11,11 +11,13 @@ public abstract class GameManager : MonoBehaviour
 {
     private int gameLevel = 0;
     [SerializeField] private Text rankingText;
+    private List<int> ranking;
     [SerializeField] private Text guideText;
     public GameObject finishButton;
     [SerializeField] private GameObject pauseButton;
     private int score = 0;     //スコア
     [SerializeField] private Text scoreText;
+    [SerializeField] private RectTransform scoreParent;
     protected float duration = 0;               //経過時間
     [SerializeField] protected Text durationText;
     private int life = 10;                       //ライフ
@@ -155,7 +157,12 @@ public abstract class GameManager : MonoBehaviour
     //画面上に各難易度のランキングを表示
     private void DisplayRanking()
     {
-
+        ranking = Manager.PastScores()[Manager.level];
+        rankingText.text = "";
+        for (int i=0; i<5; i++)
+        {
+            rankingText.text += ranking[i].ToString() + "\n";
+        }
     }
     //クリックしてゲーム開始
     public void GameStart()
@@ -201,6 +208,17 @@ public abstract class GameManager : MonoBehaviour
     {
         score += s;
         scoreText.text = score.ToString();
+        GameObject scoreChangeText = Instantiate(Resources.Load<GameObject>("Prefabs/ScoreChangeText"), scoreParent);
+        scoreChangeText.GetComponent<RectTransform>().anchoredPosition = new(0, 70);
+        scoreChangeText.GetComponent<Text>().text = s.ToString();
+        if (score > ranking[0])
+        {
+            scoreText.color = Color.yellow;
+        }
+        else
+        {
+            scoreText.color = Color.white;
+        }
     }
     public void Skill1()
     {

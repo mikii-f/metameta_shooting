@@ -668,6 +668,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &1145604817 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2326508925767992437, guid: 6dba84f0222ccca4fb3723c2eed18c8e, type: 3}
+  m_PrefabInstance: {fileID: 1090907004}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1152990666 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5384952595774457611, guid: 6dba84f0222ccca4fb3723c2eed18c8e, type: 3}
@@ -746,6 +751,7 @@ MonoBehaviour:
   finishButton: {fileID: 1396788165}
   pauseButton: {fileID: 2090502054}
   scoreText: {fileID: 1090907009}
+  scoreParent: {fileID: 1145604817}
   durationText: {fileID: 1090907008}
   lifeText: {fileID: 2384302304745575276}
   l0EnemyText: {fileID: 813660879}
@@ -777,7 +783,7 @@ Transform:
   m_GameObject: {fileID: 1374805698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.46966857, y: -0.38222897, z: 0.042437788}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

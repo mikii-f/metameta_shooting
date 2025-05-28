@@ -783,6 +783,7 @@ MonoBehaviour:
   finishButton: {fileID: 274661336}
   pauseButton: {fileID: 1161996660}
   scoreText: {fileID: 37325042}
+  scoreParent: {fileID: 2064529481}
   durationText: {fileID: 37325041}
   lifeText: {fileID: 1702356074}
   l0EnemyText: {fileID: 1421562382}
@@ -814,7 +815,7 @@ Transform:
   m_GameObject: {fileID: 1426660045}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.46966857, y: -0.38222897, z: 0.042437788}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1272,6 +1273,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1908617021}
   m_CullTransparentMesh: 1
+--- !u!224 &2064529481 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2326508925767992437, guid: 6dba84f0222ccca4fb3723c2eed18c8e, type: 3}
+  m_PrefabInstance: {fileID: 37325037}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
