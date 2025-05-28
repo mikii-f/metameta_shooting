@@ -13,12 +13,14 @@ public abstract class Enemy : MonoBehaviour
     protected RectTransform enemyParent;    //弾丸のInstantiate先
     protected float interval;
     protected float intervalCount = 0;
+    protected bool isBulletCollision = false;
     
     private void OnTriggerEnter2D(Collider2D bullet)
     {
         //自機の弾丸に当たったときHPを減らすとともに弾丸をDestroy
-        if (bullet.CompareTag("PlayerBullet"))
+        if (bullet.CompareTag("PlayerBullet") && !isBulletCollision)
         {
+            isBulletCollision = true;
             hp--;
             Destroy(bullet.gameObject);
             //HPが0になると撃破となり、GameManagerに通知、更にSPおよび「メタ」獲得演出を出してからDestroy

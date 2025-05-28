@@ -22,6 +22,7 @@ public class Enemy1_0 : Enemy
     // Update is called once per frame
     void Update()
     {
+        isBulletCollision = false;
         if (!GameManager.isPause)
         {
             durationCount += Time.deltaTime;

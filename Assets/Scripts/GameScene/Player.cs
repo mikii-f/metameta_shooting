@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float playerSpeed = 600;
     private float interval = 0.1f;      //弾丸発射の間隔
     private float intervalCount = 0;    //intervalの計測用
+    private bool isEnemyCollision = false;
+    private bool isWordCollision = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +30,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isEnemyCollision = false;
+        isWordCollision = false;
         intervalCount += Time.deltaTime;
         if (!GameManager.isPause)
         {
@@ -120,11 +124,12 @@ public class Player : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!gameManager.finishButton.activeSelf)
+        if (!gameManager.finishButton.activeSelf && !isEnemyCollision)
         {
             //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
             if (collision.CompareTag("Enemy") || collision.CompareTag("EnemyBullet"))
             {
+                isEnemyCollision = true;
                 if (gameManager.Damaged() == 0)
                 {
                     StartCoroutine(Damaged());
@@ -140,8 +145,9 @@ public class Player : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
-        if (collision.CompareTag("Word"))
+        if (collision.CompareTag("Word") && !isWordCollision)
         {
+            isWordCollision = true;
             //色やScaleに応じたスコア増減処理
             Text t = collision.GetComponent<Text>();
             int cScore = 0;
@@ -181,17 +187,34 @@ public class Player : MonoBehaviour
     {
         playerCollider.enabled = false;
         ColorChange(Color.clear);
-        yield return new WaitForSeconds(0.25f);
+        yield return StartCoroutine(Wait(0.2f));
         ColorChange(defaultColor);
-        yield return new WaitForSeconds(0.25f);
+        yield return StartCoroutine(Wait(0.2f));
         ColorChange(Color.clear);
-        yield return new WaitForSeconds(0.25f);
+        yield return StartCoroutine(Wait(0.2f));
         ColorChange(defaultColor);
-        yield return new WaitForSeconds(0.25f);
+        yield return StartCoroutine(Wait(0.2f));
         ColorChange(Color.clear);
-        yield return new WaitForSeconds(0.25f);
+        yield return StartCoroutine(Wait(0.2f));
         ColorChange(defaultColor);
         playerCollider.enabled = true;
+    }
+    private IEnumerator Wait(float t)
+    {
+        float temp = 0;
+        while (true)
+        {
+            if (!GameManager.isPause)
+            {
+                yield return null;
+                temp += Time.deltaTime;
+                if (temp >= t)
+                {
+                    break;
+                }
+            }
+            yield return null;
+        }
     }
     private IEnumerator Destroyed()
     {

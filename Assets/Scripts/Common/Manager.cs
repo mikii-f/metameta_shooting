@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 //シーンを跨いでのデータ管理
 public class Manager : MonoBehaviour
 {
-    public static int level; //選択した難易度
+    public static int level = 0; //選択した難易度
     public static List<List<int>> enemyComposition = new(){new(){20, 2, 0}, new(){30, 8, 1}, new(){50, 15, 3}}; //各難易度の敵構成(例)
-    public static Result result; //その回のゲームのプレイ結果
+    public static Result result = new(); //その回のゲームのプレイ結果
     public static int gameWidth = 320;
 
     //ゲームの結果として使用する情報をまとめて保持する
     public class Result
     {
-        public int score;       //スコア
-        public float duration;    //生存時間
-        public List<int> destroyedEnemy;    //撃破した敵の数(強さ別)
+        public int score = 0;       //スコア
+        public float duration = 0;    //生存時間
+        public List<int> destroyedEnemy = new(){0, 0, 0};    //撃破した敵の数(強さ別)
     }
 
     //過去のスコアの取得
@@ -37,7 +37,7 @@ public class Manager : MonoBehaviour
         return pastScores;
     }
     //更新されたランキングを保存
-    public static void Save(int level, List<int> scores)
+    public static void Save(List<int> scores)
     {
         switch (level)
         {
@@ -53,5 +53,10 @@ public class Manager : MonoBehaviour
             default:
                 break;
         }
+    }
+    //各難易度におけるベストスコアを計算
+    public static int BestScore()
+    {
+        return enemyComposition[level][0] * 500 + enemyComposition[level][1] * 2000 + enemyComposition[level][2] * 4000;
     }
 }

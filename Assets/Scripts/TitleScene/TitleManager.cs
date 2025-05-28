@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 //タイトルシーンにおける動作を管理
 public class TitleManager : MonoBehaviour
@@ -11,11 +13,23 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private RectTransform normalButtonRect;
     [SerializeField] private RectTransform hardButtonRect;
     [SerializeField] private GameObject black;
+    [SerializeField] private GameObject rankingPanel;
+    [SerializeField] private Text ranking1;
+    [SerializeField] private Text ranking2;
+    [SerializeField] private Text ranking3;
     // Start is called before the first frame update
     void Start()
     {
         tutorialPanel.SetActive(false);
         levelSelectPanel.SetActive(false);
+        rankingPanel.SetActive(false);
+        List<List<int>> ranking = Manager.PastScores();
+        for (int i=0; i<5; i++)
+        {
+            ranking1.text += ranking[0][i] + "\n";
+            ranking2.text += ranking[1][i] + "\n";
+            ranking3.text += ranking[2][i] + "\n";
+        }
         StartCoroutine(Common.FadeIn(black));
     }
 
@@ -32,13 +46,14 @@ public class TitleManager : MonoBehaviour
     }
     public void Ranking()
     {
-
+        rankingPanel.SetActive(true);
     }
     //「戻る」またはパネルの外を押したら各種パネルを非表示にする
     public void Close()
     {
         tutorialPanel.SetActive(false);
         levelSelectPanel.SetActive(false);
+        rankingPanel.SetActive(false);
     }
 
     public void Easy()
