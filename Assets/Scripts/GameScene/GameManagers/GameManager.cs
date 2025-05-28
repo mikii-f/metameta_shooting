@@ -400,8 +400,10 @@ public abstract class GameManager : MonoBehaviour
     private void SaveResult()
     {
         Manager.Result result = new();
-
-        
+        result.score = score;
+        result.duration = duration;
+        result.destroyedEnemy = destroyedEnemy;
+        Manager.result = result;
     }
     private IEnumerator Result(int t)
     {

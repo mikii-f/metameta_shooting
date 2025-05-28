@@ -13,12 +13,18 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private Text enemysText;
     [SerializeField] private GameObject black;
     
+
     // Start is called before the first frame update
     void Start()
     {
         black.SetActive(false);
         //スコア、生存時間、敵撃破数のテキストを更新
-
+        scoreText.text = Manager.result.score.ToString();
+        durationText.text = Manager.result.duration.ToString("F2") + "s";
+        string enemy_1 = Manager.result.destroyedEnemy[0].ToString();
+        string enemy_2 = Manager.result.destroyedEnemy[1].ToString();
+        string enemy_3 = Manager.result.destroyedEnemy[2].ToString();
+        enemysText.text = "L0: " + enemy_1 + "/?  " + "L1: " + enemy_2 + "/?  " + "L2: " + enemy_3 + "/?";
     }
 
     //「タイトルへ」をクリックしたときにタイトルシーンへ遷移
