@@ -144,16 +144,35 @@ public class Player : MonoBehaviour
         {
             //色やScaleに応じたスコア増減処理
             Text t = collision.GetComponent<Text>();
-            //テキストが「メタ」以外であった場合-250点
+            int cScore = 0;
+            if (t.text == "メタ")
+            { 
+                //テキストがメタであった場合
+                if (t.color == new Color(1, 1, 0, 1))
+                {
+                    //テキストのカラーがオレンジの場合+1000点
+                    cScore = 1000;
+                }
+                else if (Mathf.Abs(t.rectTransform.localScale.x - 0.7f) < 0.1f)
+                {
+                    //テキストのスケールが小さい場合+1000点
+                    cScore = 1000;
+                }
+                else
+                {
+                    //それ以外の場合+500点
+                    cScore = 500;
+                }
+            }
+            else
+            {
+                //テキストがメタでなかった場合
+                //テキストが「メタ」以外であった場合-250点
+                cScore = -250;
+            }
 
 
-            //テキストがメタであった場合
-            //テキストのカラーがオレンジの場合+1000点
-
-            //テキストのスケールが小さい場合+1000点
-
-            //それ以外の場合+500点
-
+            gameManager.ScoreChange(cScore);
             Destroy(collision.gameObject);
         }
     }
