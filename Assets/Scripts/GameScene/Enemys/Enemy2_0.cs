@@ -15,6 +15,7 @@ public class Enemy2_0 : Enemy
         enemyLevel = EnemyLevel.Level2;
         myImages = GetComponentsInChildren<Image>(true);
         enemyParent = GameObject.Find("EnemyParent").GetComponent<RectTransform>();
+        audioSource = GetComponent<AudioSource>();
         interval = 7;
         intervalCount = 3;
     }

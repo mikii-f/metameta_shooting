@@ -19,12 +19,18 @@ public class Player : MonoBehaviour
     private float intervalCount = 0;    //intervalの計測用
     private bool isEnemyCollision = false;
     private bool isWordCollision = false;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip damage;
+    [SerializeField] private AudioClip destroy;
+    [SerializeField] private AudioClip plus;
+    [SerializeField] private AudioClip minus;
     // Start is called before the first frame update
     void Start()
     {
         playerRect = GetComponent<RectTransform>();
         playerCollider = GetComponent<Collider2D>();
         semiCircleRect = semiCircle.GetComponent<RectTransform>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -58,14 +64,10 @@ public class Player : MonoBehaviour
         //左ドラッグ中はマウスの位置(スマホなら手の位置)に応じて自機が移動
         if (Input.GetMouseButton(0))
         {
-            Vector2 mousePosition = Input.mousePosition;    //マウスの位置(画面左下が(0,0))
-                                                            //右下の操作マーク(画面中心を原点とする座標において、(x, y)=(660, -360))が操作の中心となるように補正
-            mousePosition.x -= 1620;
-            mousePosition.y -= 180;
-            if (Mathf.Pow(Mathf.Pow(mousePosition.x, 2) + Mathf.Pow(mousePosition.y, 2), 0.5f) < 400)
-            {
-                angle = Mathf.Atan2(mousePosition.y, mousePosition.x);
-            }
+            Vector2 mousePosition = Input.mousePosition;            //マウスの位置(画面左下が(0,0))
+            mousePosition.x -= 960 + playerRect.anchoredPosition.x;
+            mousePosition.y -= 540 + playerRect.anchoredPosition.y; //自機が操作の中心となるよう補正
+            angle = Mathf.Atan2(mousePosition.y, mousePosition.x);
         }
         //矢印キーでの操作への対応
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.UpArrow))
@@ -133,10 +135,14 @@ public class Player : MonoBehaviour
                 if (gameManager.Damaged() == 0)
                 {
                     StartCoroutine(Damaged());
+                    audioSource.clip = damage;
+                    audioSource.Play();
                 }
                 else
                 {
                     StartCoroutine(Destroyed());
+                    audioSource.clip = destroy;
+                    audioSource.Play();
                 }
             }
             //弾丸の場合はその弾丸をDestroy
@@ -169,15 +175,17 @@ public class Player : MonoBehaviour
                     //それ以外の場合+500点
                     cScore = 500;
                 }
+                audioSource.clip = plus;
+                audioSource.Play();
             }
             else
             {
                 //テキストがメタでなかった場合
                 //テキストが「メタ」以外であった場合-250点
                 cScore = -250;
+                audioSource.clip = minus;
+                audioSource.Play();
             }
-
-
             gameManager.ScoreChange(cScore);
             Destroy(collision.gameObject);
         }

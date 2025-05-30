@@ -15,6 +15,9 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private Text enemysText;
     [SerializeField] private GameObject black;
     [SerializeField] private Text rankinText;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip cymbal;
+    [SerializeField] private AudioClip system1;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,7 @@ public class ResultManager : MonoBehaviour
         enemysText.text = "L0:" + enemy_1 + "/" + Manager.enemyComposition[Manager.level][0].ToString();
         enemysText.text += "  L1:" + enemy_2 + "/" + Manager.enemyComposition[Manager.level][1].ToString();
         enemysText.text += "  L2:" + enemy_3 + "/" + Manager.enemyComposition[Manager.level][2].ToString();
+        audioSource = GetComponent<AudioSource>();
         UpdateRanking();
     }
 
@@ -59,6 +63,8 @@ public class ResultManager : MonoBehaviour
             }
             Manager.Save(ranking);
             scoreText.color = Color.yellow;
+            audioSource.clip = cymbal;
+            audioSource.Play();
         }
         else
         {
@@ -75,6 +81,8 @@ public class ResultManager : MonoBehaviour
     {
         StartCoroutine(Common.Button(titleButtonRect));
         StartCoroutine(GoTitle());
+        audioSource.clip = system1;
+        audioSource.Play();
     }
     private IEnumerator GoTitle()
     {
