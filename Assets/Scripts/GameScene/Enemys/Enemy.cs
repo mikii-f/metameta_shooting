@@ -14,6 +14,7 @@ public abstract class Enemy : MonoBehaviour
     protected float interval;
     protected float intervalCount = 0;
     protected bool isBulletCollision = false;
+    protected AudioSource audioSource;
     
     private void OnTriggerEnter2D(Collider2D bullet)
     {
@@ -23,6 +24,7 @@ public abstract class Enemy : MonoBehaviour
             isBulletCollision = true;
             hp--;
             Destroy(bullet.gameObject);
+            audioSource.Play();
             //HPが0になると撃破となり、GameManagerに通知、更にSPおよび「メタ」獲得演出を出してからDestroy
             if (hp == 0)
             {

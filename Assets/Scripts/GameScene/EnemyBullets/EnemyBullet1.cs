@@ -24,7 +24,7 @@ public class EnemyBullet1 : MonoBehaviour
             {
                 Vector2 playerPos = playerRect.anchoredPosition;
                 Vector2 myPos = myRect.anchoredPosition;
-                if (playerPos.y > myPos.y)
+                if (playerPos.y + 50 > myPos.y)
                 {
                     homing = false;
                 }

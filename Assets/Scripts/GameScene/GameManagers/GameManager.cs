@@ -54,6 +54,15 @@ public abstract class GameManager : MonoBehaviour
     protected List<int> appearedEnemy = new(){0, 0, 0}; //発生した敵の数(強さ別)
     public static int disappearedEnemyCount = 0;        //自然消滅も含めて、消えたエネミーの数の合計
     private readonly List<string> metas = new List<string>() {"メ夕", "メク", "〆タ", "〆夕", "〆ク", "Xタ", "X夕", "Xク"};
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip system1;
+    [SerializeField] private AudioClip system2;
+    [SerializeField] private AudioClip countDown;
+    [SerializeField] private AudioClip whistle;
+    [SerializeField] private AudioClip skill;
+    [SerializeField] private AudioClip cymbal;
+    [SerializeField] private AudioClip destroyEnemy;
+    [SerializeField] private AudioSource bgmSource;
 
     // Start is called before the first frame update
     void Start()
@@ -77,6 +86,7 @@ public abstract class GameManager : MonoBehaviour
         disappearedEnemyCount = 0;
         finishButton.SetActive(false);
         pausePanel.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
         DisplayRanking();
         lifeText.text = "×" + life.ToString();
         skill1Image.color = new(0.5f, 100f/255, 0, 1); skill2Image.color = new(0.5f, 100f / 255, 0, 1); skill3Image.color = new(0.5f, 100f / 255, 0, 1);
@@ -96,6 +106,10 @@ public abstract class GameManager : MonoBehaviour
                 intervalCount += Time.deltaTime;
                 duration += Time.deltaTime;
                 durationText.text = duration.ToString("F2") + "s";
+                if (disappearedEnemyCount == Manager.enemyComposition[gameLevel].Sum())
+                {
+                    GameClear();
+                }
             }
             if (Input.GetKeyDown(KeyCode.P) && pauseButton.activeSelf)
             {
@@ -146,10 +160,6 @@ public abstract class GameManager : MonoBehaviour
                     SPManage();
                 }
             }
-            if (disappearedEnemyCount == Manager.enemyComposition[gameLevel].Sum())
-            {
-                GameClear();
-            }
             //難易度ごとの敵発生アルゴリズム
             Algorithm();
         }
@@ -176,15 +186,24 @@ public abstract class GameManager : MonoBehaviour
     private IEnumerator Go()
     {
         guideText.text = "3";
+        audioSource.clip = countDown;
+        audioSource.Play();
         yield return new WaitForSeconds(1);
         guideText.text = "2";
+        audioSource.clip = countDown;
+        audioSource.Play();
         yield return new WaitForSeconds(1);
         guideText.text = "1";
+        audioSource.clip = countDown;
+        audioSource.Play();
         yield return new WaitForSeconds(1);
         guideText.text = "Go!!";
+        audioSource.clip = whistle;
+        audioSource.Play();
         yield return new WaitForSeconds(1);
         guideText.text = "";
         isPause = false;
+        bgmSource.Play();
     }
     //自機がダメージを受けた時のライフを減らす処理
     //ライフが0になったらGameOver()を呼び出す
@@ -232,6 +251,8 @@ public abstract class GameManager : MonoBehaviour
             skill1Image.color = new(0.5f, 100f / 255, 0, 1);
             skill1Image2.color = Color.gray;
             SPManage();
+            audioSource.clip = skill;
+            audioSource.Play();
         }
     }
     public void Skill2()
@@ -246,6 +267,8 @@ public abstract class GameManager : MonoBehaviour
             skill2Image.color = new(0.5f, 100f / 255, 0, 1);
             skill2Image2.color = Color.gray;
             SPManage();
+            audioSource.clip = skill;
+            audioSource.Play();
         }
     }
     public void Skill3()
@@ -260,6 +283,8 @@ public abstract class GameManager : MonoBehaviour
             skill3Image.color = new(0.5f, 100f / 255, 0, 1);
             skill3Image2.color = Color.gray;
             SPManage();
+            audioSource.clip = skill;
+            audioSource.Play();
         }
 
     }
@@ -296,6 +321,11 @@ public abstract class GameManager : MonoBehaviour
     public void DestroyEnemy(EnemyLevel enemyLevel)
     {
         disappearedEnemyCount++;
+        if (disappearedEnemyCount != Manager.enemyComposition[gameLevel].Sum())
+        {
+            audioSource.clip = destroyEnemy;
+            audioSource.Play();
+        }
         switch (enemyLevel)
         {
             case EnemyLevel.Level0:
@@ -313,6 +343,8 @@ public abstract class GameManager : MonoBehaviour
                 spSlider.value = skillPoint;
                 SPManage();
                 StartCoroutine(DropMeta1());
+                audioSource.clip = destroyEnemy;
+                audioSource.Play();
                 break;
             case EnemyLevel.Level2:
                 destroyedEnemy[2]++;
@@ -321,6 +353,8 @@ public abstract class GameManager : MonoBehaviour
                 spSlider.value = skillPoint;
                 SPManage();
                 StartCoroutine(DropMeta2());
+                audioSource.clip = destroyEnemy;
+                audioSource.Play();
                 break;
             default:
                 break;
@@ -409,11 +443,15 @@ public abstract class GameManager : MonoBehaviour
         guideText.color = Color.yellow;
         finishButton.SetActive(true);
         pauseButton.SetActive(false);
+        audioSource.clip = cymbal;
+        audioSource.Play();
     }
     public void Finish()
     {
         StartCoroutine(Common.Button(finishButton.GetComponent<RectTransform>()));
         StartCoroutine(Result(0));
+        audioSource.clip = system1;
+        audioSource.Play();
     }
     private void SaveResult()
     {
@@ -427,6 +465,7 @@ public abstract class GameManager : MonoBehaviour
     {
         SaveResult();
         yield return new WaitForSeconds(t);
+        StartCoroutine(BGMFade());
         yield return StartCoroutine(Common.FadeOut(black));
         SceneManager.LoadScene("ResultScene");
     }
@@ -437,6 +476,8 @@ public abstract class GameManager : MonoBehaviour
         {
             pausePanel.SetActive(true);
             isPause = true;
+            audioSource.clip = system1;
+            audioSource.Play();
         }
     }
     //ポーズからゲームに戻る
@@ -444,15 +485,31 @@ public abstract class GameManager : MonoBehaviour
     {
         pausePanel.SetActive(false);
         isPause = false;
+        audioSource.clip = system2;
+        audioSource.Play();
     }
     //最初からやり直す
     public void Restart()
     {
+        audioSource.clip = system1;
+        audioSource.Play();
+        StartCoroutine(Res());
+    }
+    private IEnumerator Res()
+    {
+        yield return new WaitForSeconds(0.1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     //タイトルに戻る
     public void Title()
     {
+        audioSource.clip = system1;
+        audioSource.Play();
+        StartCoroutine (Tit());
+    }
+    private IEnumerator Tit()
+    {
+        yield return new WaitForSeconds(0.1f);
         SceneManager.LoadScene("TitleScene");
     }
     private void L0EnemyText(int x)
@@ -497,5 +554,13 @@ public abstract class GameManager : MonoBehaviour
         GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy2_0"), enemyParent);
         newEnemy.GetComponent<RectTransform>().anchoredPosition = new(x, 650);
         appearedEnemy[2]++;
+    }
+    private IEnumerator BGMFade()
+    {
+        while (bgmSource.volume > 0)
+        {
+            bgmSource.volume -= Time.deltaTime;
+            yield return null;
+        }
     }
 }
