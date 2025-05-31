@@ -11,6 +11,7 @@ public class Hard : GameManager
         if (test)
         {
             GenerateEnemy2_0(0);
+            GenerateEnemy0_2(0);
             test = false;
         }
     }

@@ -45,7 +45,6 @@ public class Player : MonoBehaviour
             //スキル1発動中の場合、intervalの半分までカウントしたら発射
             if(gameManager.isSkill1 == true)
             {
-                Debug.Log("skill1 is being used");
                 if(intervalCount >= interval/2)
                 {
                     intervalCount = 0;
@@ -54,9 +53,10 @@ public class Player : MonoBehaviour
                         Bullet();
                     }
                 }
-            }else{
-                Debug.Log("skill1 is not being used");
-            //スキル1未発動の場合、intervalまでカウントしたら発射
+            }
+            else
+            {
+                //スキル1未発動の場合、intervalまでカウントしたら発射
                 if (intervalCount >= interval)
                 {
                     intervalCount = 0;
