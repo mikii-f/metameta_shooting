@@ -43,17 +43,28 @@ public class Player : MonoBehaviour
         {
             Move();
             //スキル1発動中の場合、intervalの半分までカウントしたら発射
-
-
-            //スキル1未発動の場合、intervalまでカウントしたら発射
-
-            if (intervalCount >= interval)
+            if(gameManager.isSkill1 == true)
             {
-                intervalCount = 0;
-                //ダメージを受けた直後、ゲーム終了後は撃たない
-                if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                Debug.Log("skill1 is being used");
+                if(intervalCount >= interval/2)
                 {
-                    Bullet();
+                    intervalCount = 0;
+                    if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                    {
+                        Bullet();
+                    }
+                }
+            }else{
+                Debug.Log("skill1 is not being used");
+            //スキル1未発動の場合、intervalまでカウントしたら発射
+                if (intervalCount >= interval)
+                {
+                    intervalCount = 0;
+                    //ダメージを受けた直後、ゲーム終了後は撃たない
+                    if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                    {
+                        Bullet();
+                    }
                 }
             }
         }
@@ -121,6 +132,15 @@ public class Player : MonoBehaviour
         GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
         newBullet.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition + new Vector2(0, 50);
         //スキル2発動中の場合、追加で角度π/3, 2π/3の方向にも弾丸を発射(Enemy0_1.csの50行目付近を参考)
+        if(gameManager.isSkill2 == true)
+        {
+            GameObject newBullet2 = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
+            newBullet2.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition + new Vector2(0, 50);
+            newBullet2.GetComponent<PlayerBullet>().radian = Mathf.PI / 3;
+            GameObject newBullet3 = Instantiate(Resources.Load<GameObject>("Prefabs/PlayerBullet"), bulletParent);
+            newBullet3.GetComponent<RectTransform>().anchoredPosition = playerRect.anchoredPosition + new Vector2(0, 50);
+            newBullet3.GetComponent<PlayerBullet>().radian = Mathf.PI * 2 / 3;
+        }
 
     }
     
