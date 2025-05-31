@@ -537,6 +537,12 @@ public abstract class GameManager : MonoBehaviour
         newEnemy.GetComponent<RectTransform>().anchoredPosition = new(x, 600);
         appearedEnemy[0]++;
     }
+    protected void GenerateEnemy0_2(int x)
+    {
+        GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy0_2"), enemyParent);
+        newEnemy.GetComponent<RectTransform>().anchoredPosition = new(x, 600);
+        appearedEnemy[0]++;
+    }
     protected void GenerateEnemy1_0(int x)
     {
         GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy1_0"), enemyParent);
