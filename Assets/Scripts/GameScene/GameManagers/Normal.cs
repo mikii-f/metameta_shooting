@@ -32,7 +32,7 @@ public class Normal : GameManager
                 }
             }
             intervalCount = 0;
-            interval = UnityEngine.Random.Range(3, 5);
+            interval = UnityEngine.Random.Range(3.5f, 4.5f);
         }
     }
 }

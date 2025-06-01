@@ -46,7 +46,7 @@ public class Enemy1_1 : Enemy
                     float yDelta = destination.y - parentRect.anchoredPosition.y;
                     float angle = Mathf.Atan2(yDelta, xDelta);
                     parentRect.anchoredPosition += new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * 600 * Time.deltaTime;
-                    if (destination.x-10 < parentRect.anchoredPosition.x && parentRect.anchoredPosition.x < destination.x + 10 && parentRect.anchoredPosition.y <= 400)
+                    if (destination.x - 20 < parentRect.anchoredPosition.x && parentRect.anchoredPosition.x < destination.x + 20 && parentRect.anchoredPosition.y <= 400)
                     {
                         state = 2;
                     }
