@@ -23,7 +23,7 @@ public class Easy : GameManager
                 }
             }
             intervalCount = 0;
-            interval = UnityEngine.Random.Range(4, 6);
+            interval = UnityEngine.Random.Range(4f, 5f);
         }
     }
 }

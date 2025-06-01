@@ -14,6 +14,7 @@ public abstract class GameManager : MonoBehaviour
     private List<int> ranking;
     [SerializeField] private Text guideText;
     public GameObject finishButton;
+    [SerializeField] private GameObject finishText;
     [SerializeField] private GameObject pauseButton;
     private int score = 0;     //スコア
     [SerializeField] private Text scoreText;
@@ -85,6 +86,7 @@ public abstract class GameManager : MonoBehaviour
         isSkill3 = false;
         disappearedEnemyCount = 0;
         finishButton.SetActive(false);
+        finishText.SetActive(false);
         pausePanel.SetActive(false);
         audioSource = GetComponent<AudioSource>();
         DisplayRanking();
@@ -439,8 +441,9 @@ public abstract class GameManager : MonoBehaviour
     }
     private void GameClear()
     {
-        guideText.text = "GameClear!!";
-        guideText.color = Color.yellow;
+        guideText.text = "No Enemies Remain";
+        guideText.color = new(1, 1, 0, 0.5f);
+        finishText.SetActive(true);
         finishButton.SetActive(true);
         pauseButton.SetActive(false);
         audioSource.clip = cymbal;

@@ -41,8 +41,14 @@ public class Meta : MonoBehaviour
             if (GameManager.isSkill3 && isMeta)
             {
                 Vector2 playerPos = playerRect.anchoredPosition;
-                float angle = Mathf.Atan2((playerPos.y - BasePos().y), (playerPos.x - BasePos().x));
-                parentRect.anchoredPosition += new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * ySpeed * 2 * Time.deltaTime;
+                float deltaX = playerPos.x - BasePos().x;
+                float deltaY = playerPos.y - BasePos().y;
+                //既に近い場合は動かない
+                if (Mathf.Pow((Mathf.Pow(deltaX, 2) + Mathf.Pow(deltaY, 2)), 0.5f) >= 30)
+                {
+                    float angle = Mathf.Atan2(deltaY, deltaX);
+                    parentRect.anchoredPosition += new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * ySpeed * 2 * Time.deltaTime;
+                }
             }
             else
             {

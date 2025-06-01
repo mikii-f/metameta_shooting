@@ -1182,6 +1182,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1508625143 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8796458331847499010, guid: 1bc8d673e8e656343944a49199667892, type: 3}
+  m_PrefabInstance: {fileID: 337436633}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1637705943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,6 +1385,7 @@ MonoBehaviour:
   rankingText: {fileID: 276476153}
   guideText: {fileID: 337436638}
   finishButton: {fileID: 1379404978}
+  finishText: {fileID: 1508625143}
   pauseButton: {fileID: 1473024890}
   scoreText: {fileID: 276476152}
   scoreParent: {fileID: 975769775}

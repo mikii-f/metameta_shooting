@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float playerSpeed = 600;
     private float interval = 0.1f;      //弾丸発射の間隔
     private float intervalCount = 0;    //intervalの計測用
+    private bool isDamage = false;
     private bool isEnemyCollision = false;
     private bool isWordCollision = false;
     private AudioSource audioSource;
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
                 if(intervalCount >= interval/2)
                 {
                     intervalCount = 0;
-                    if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                    if (!isDamage && !gameManager.finishButton.activeSelf)
                     {
                         Bullet();
                     }
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour
                 {
                     intervalCount = 0;
                     //ダメージを受けた直後、ゲーム終了後は撃たない
-                    if (playerCollider.enabled && !gameManager.finishButton.activeSelf)
+                    if (!isDamage && !gameManager.finishButton.activeSelf)
                     {
                         Bullet();
                     }
@@ -76,9 +77,15 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Vector2 mousePosition = Input.mousePosition;            //マウスの位置(画面左下が(0,0))
-            mousePosition.x -= 960 + playerRect.anchoredPosition.x;
-            mousePosition.y -= 540 + playerRect.anchoredPosition.y; //自機が操作の中心となるよう補正
-            angle = Mathf.Atan2(mousePosition.y, mousePosition.x);
+            mousePosition.x -= Screen.width / 2;
+            mousePosition.y -= Screen.height / 2;
+            float deltaX = mousePosition.x - playerRect.anchoredPosition.x;
+            float deltaY = mousePosition.y - playerRect.anchoredPosition.y;
+            //自機の真上に手を置いている場合に振動しないように
+            if (Mathf.Pow((Mathf.Pow(deltaX, 2) + Mathf.Pow(deltaY, 2)), 0.5f) >= 15)
+            {
+                angle = Mathf.Atan2(deltaY, deltaX);
+            }
         }
         //矢印キーでの操作への対応
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.UpArrow))
@@ -146,7 +153,7 @@ public class Player : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!gameManager.finishButton.activeSelf && !isEnemyCollision)
+        if (!gameManager.finishButton.activeSelf && !isEnemyCollision && !isDamage)
         {
             //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
             if (collision.CompareTag("Enemy") || collision.CompareTag("EnemyBullet"))
@@ -171,7 +178,7 @@ public class Player : MonoBehaviour
                 Destroy(collision.gameObject);
             }
         }
-        if (collision.CompareTag("Word") && !isWordCollision)
+        if (collision.CompareTag("Word") && !isWordCollision && (!isDamage || GameManager.isSkill3))
         {
             isWordCollision = true;
             //色やScaleに応じたスコア増減処理
@@ -213,7 +220,7 @@ public class Player : MonoBehaviour
     //ダメージを受けた時の点滅及び無敵時間
     private IEnumerator Damaged()
     {
-        playerCollider.enabled = false;
+        isDamage = true;
         ColorChange(Color.clear);
         yield return StartCoroutine(Wait(0.2f));
         ColorChange(defaultColor);
@@ -225,7 +232,7 @@ public class Player : MonoBehaviour
         ColorChange(Color.clear);
         yield return StartCoroutine(Wait(0.2f));
         ColorChange(defaultColor);
-        playerCollider.enabled = true;
+        isDamage = false;
     }
     private IEnumerator Wait(float t)
     {
