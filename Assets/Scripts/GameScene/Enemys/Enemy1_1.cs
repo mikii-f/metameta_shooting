@@ -96,11 +96,11 @@ public class Enemy1_1 : Enemy
                 default:
                     break;
             }
-        }
-        if (parentRect.anchoredPosition.y < -650)
-        {
-            GameManager.disappearedEnemyCount++;
-            Destroy(parentRect.gameObject);
+            if (parentRect.anchoredPosition.y < -650)
+            {
+                GameManager.disappearedEnemyCount++;
+                Destroy(parentRect.gameObject);
+            }
         }
     }
 }

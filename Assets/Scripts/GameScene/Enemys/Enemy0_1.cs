@@ -53,11 +53,11 @@ public class Enemy0_1 : Enemy
                 newBullet3.GetComponent<RectTransform>().anchoredPosition = BasePos() + new Vector2(0, -50);
                 newBullet3.GetComponent<EnemyBullet0>().radian = Mathf.PI * 2 / 3;
             }
-        }
-        if (BasePos().y < -600)
-        {
-            GameManager.disappearedEnemyCount++;
-            Destroy(parentRect.gameObject);
+            if (BasePos().y < -600)
+            {
+                GameManager.disappearedEnemyCount++;
+                Destroy(parentRect.gameObject);
+            }
         }
     }
 }

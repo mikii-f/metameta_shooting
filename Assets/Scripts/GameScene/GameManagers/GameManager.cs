@@ -546,6 +546,12 @@ public abstract class GameManager : MonoBehaviour
         newEnemy.GetComponent<RectTransform>().anchoredPosition = new(x, 600);
         appearedEnemy[0]++;
     }
+    protected void GenerateEnemy0_3()
+    {
+        GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy0_3"), enemyParent);
+        newEnemy.GetComponent<RectTransform>().anchoredPosition = new(-499, 500);
+        appearedEnemy[0]++;
+    }
     protected void GenerateEnemy1_0(int x)
     {
         GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy1_0"), enemyParent);
@@ -556,6 +562,12 @@ public abstract class GameManager : MonoBehaviour
     {
         GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy1_1"), enemyParent);
         newEnemy.GetComponent<RectTransform>().anchoredPosition = new(x, 650);
+        appearedEnemy[1]++;
+    }
+    protected void GenerateEnemy1_2()
+    {
+        GameObject newEnemy = Instantiate(Resources.Load<GameObject>("Prefabs/Enemy1_2"), enemyParent);
+        newEnemy.GetComponent<RectTransform>().anchoredPosition = new(-499, 500);
         appearedEnemy[1]++;
     }
     protected void GenerateEnemy2_0(int x)
