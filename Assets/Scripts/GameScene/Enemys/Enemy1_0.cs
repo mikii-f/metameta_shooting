@@ -50,12 +50,12 @@ public class Enemy1_0 : Enemy
                 GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyBullet1"), enemyParent);
                 newBullet.GetComponent<RectTransform>().anchoredPosition = BasePos() + new Vector2(0, -100);
             }
-        }
-        //上に退却していくタイプ
-        if (parentRect.anchoredPosition.y > 650)
-        {
-            GameManager.disappearedEnemyCount++;
-            Destroy(parentRect.gameObject);
+            //上に退却していくタイプ
+            if (parentRect.anchoredPosition.y > 650)
+            {
+                GameManager.disappearedEnemyCount++;
+                Destroy(parentRect.gameObject);
+            }
         }
     }
 }

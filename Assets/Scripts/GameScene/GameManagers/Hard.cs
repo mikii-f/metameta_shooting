@@ -10,9 +10,35 @@ public class Hard : GameManager
     {
         if (test)
         {
-            GenerateEnemy2_0(0);
-            GenerateEnemy0_2(0);
+            StartCoroutine(GenerateEnemys());
             test = false;
+        }
+    }
+    private IEnumerator GenerateEnemys()
+    {
+        GenerateEnemy1_2();
+        yield return StartCoroutine(Wait(0.25f));
+        GenerateEnemy0_3();
+        yield return StartCoroutine(Wait(0.25f));
+        GenerateEnemy0_3();
+        yield return StartCoroutine(Wait(0.25f));
+        GenerateEnemy0_3();
+    }
+    private IEnumerator Wait(float t)
+    {
+        float temp = 0;
+        while (true)
+        {
+            if (!GameManager.isPause)
+            {
+                yield return null;
+                temp += Time.deltaTime;
+                if (temp >= t)
+                {
+                    break;
+                }
+            }
+            yield return null;
         }
     }
 }

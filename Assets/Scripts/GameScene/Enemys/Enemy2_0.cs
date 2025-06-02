@@ -66,13 +66,12 @@ public class Enemy2_0 : Enemy
             //    int r = (int)(1.25 * t * t - 5 * t + 10);
             //    myRect.anchoredPosition += new Vector2(random.Next(r * 2) - r, random.Next(r * 2) - r);
             //}
-        }
-
-        //上に退却していくタイプ
-        if (parentRect.anchoredPosition.y > 650)
-        {
-            GameManager.disappearedEnemyCount++;
-            Destroy(parentRect.gameObject);
+            //上に退却していくタイプ
+            if (parentRect.anchoredPosition.y > 650)
+            {
+                GameManager.disappearedEnemyCount++;
+                Destroy(parentRect.gameObject);
+            }
         }
     }
     //private float landing(float start, float goal, float time, float now)

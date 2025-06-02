@@ -24,19 +24,18 @@ public class Enemy0_0 : Enemy
         if (GameManager.isPause == false)
         {
             intervalCount += Time.deltaTime;
-            Vector2 temp = parentRect.anchoredPosition + new Vector2(0, -100 * Time.deltaTime);
-            parentRect.anchoredPosition = temp;
+            parentRect.anchoredPosition += new Vector2(0, -100 * Time.deltaTime);
             if (intervalCount >= interval)
             {
                 intervalCount = 0;
                 GameObject newBullet = Instantiate(Resources.Load<GameObject>("Prefabs/EnemyBullet0"), enemyParent);
                 newBullet.GetComponent<RectTransform>().anchoredPosition = BasePos() + new Vector2(0, -50);
             }
-        }
-        if (BasePos().y < -600)
-        {
-            GameManager.disappearedEnemyCount++;
-            Destroy(parentRect.gameObject);
+            if (BasePos().y < -600)
+            {
+                GameManager.disappearedEnemyCount++;
+                Destroy(parentRect.gameObject);
+            }
         }
     }
 }
