@@ -43,7 +43,7 @@ public class EnemyBullet0_2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (myRect.anchoredPosition.y < -560)
+        if (myRect.anchoredPosition.y < -600)
         {
             Destroy(gameObject);
         }

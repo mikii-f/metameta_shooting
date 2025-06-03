@@ -43,7 +43,7 @@ public class ResultManager : MonoBehaviour
         {
             if (Manager.result.score == Manager.BestScore())
             {
-                rankinText.text = "ベストスコア!";
+                rankinText.text = "パーフェクト!";
             }
             else if (ranking[0] < Manager.result.score)
             {
