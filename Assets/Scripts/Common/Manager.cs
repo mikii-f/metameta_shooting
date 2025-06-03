@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 public class Manager : MonoBehaviour
 {
     public static int level = 0; //選択した難易度
-    public static List<List<int>> enemyComposition = new(){new(){20, 2, 0}, new(){30, 8, 1}, new(){50, 15, 3}}; //各難易度の敵構成(例)
+    public static List<List<int>> enemyComposition = new(){new(){20, 2, 0}, new(){30, 8, 1}, new(){48, 17, 3}}; //各難易度の敵構成
     public static Result result = new(); //その回のゲームのプレイ結果
     public static int gameWidth = 320;
 
