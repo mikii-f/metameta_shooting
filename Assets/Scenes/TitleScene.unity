@@ -5730,7 +5730,7 @@ GameObject:
   - component: {fileID: 2096155942}
   - component: {fileID: 2096155941}
   m_Layer: 0
-  m_Name: Varsion
+  m_Name: Version
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5788,7 +5788,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u97F3\u697D:\u9B54\u738B\u9B42\nVar:1.0.0"
+  m_Text: "\u97F3\u697D:\u9B54\u738B\u9B42\nVer:1.0.1"
 --- !u!222 &2096155942
 CanvasRenderer:
   m_ObjectHideFlags: 0

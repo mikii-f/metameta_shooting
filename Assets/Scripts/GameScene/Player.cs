@@ -39,9 +39,9 @@ public class Player : MonoBehaviour
     {
         isEnemyCollision = false;
         isWordCollision = false;
-        intervalCount += Time.deltaTime;
         if (!GameManager.isPause)
         {
+            intervalCount += Time.deltaTime;
             Move();
             //スキル1発動中の場合、intervalの半分までカウントしたら発射
             if(gameManager.isSkill1 == true)
@@ -150,13 +150,14 @@ public class Player : MonoBehaviour
         }
 
     }
-    
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    //敵との衝突(当たり判定の内側に入り続けてもダメージを受けるように)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (!gameManager.finishButton.activeSelf && !isEnemyCollision && !isDamage)
         {
-            //衝突したのが敵または敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
-            if (collision.CompareTag("Enemy") || collision.CompareTag("EnemyBullet"))
+            //衝突したのが敵であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
+            if (collision.CompareTag("Enemy"))
             {
                 isEnemyCollision = true;
                 if (gameManager.Damaged() == 0)
@@ -172,9 +173,30 @@ public class Player : MonoBehaviour
                     audioSource.Play();
                 }
             }
-            //弾丸の場合はその弾丸をDestroy
+        }
+    }
+    //弾丸および文字との衝突
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!gameManager.finishButton.activeSelf && !isEnemyCollision && !isDamage)
+        {
+            //衝突したのが敵の弾丸であるならば、GameManagerにライフの減少を通知し、無敵時間に入る
             if (collision.CompareTag("EnemyBullet"))
             {
+                isEnemyCollision = true;
+                if (gameManager.Damaged() == 0)
+                {
+                    StartCoroutine(Damaged());
+                    audioSource.clip = damage;
+                    audioSource.Play();
+                }
+                else
+                {
+                    StartCoroutine(Destroyed());
+                    audioSource.clip = destroy;
+                    audioSource.Play();
+                }
+                //弾丸を消す
                 Destroy(collision.gameObject);
             }
         }
