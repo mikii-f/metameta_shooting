@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     private RectTransform playerRect;       //自身の座標
+    private RectTransform canvas;
     [SerializeField] private Image base1;
     [SerializeField] private Image base2;
     private readonly Color defaultColor = new(0, 170f / 255, 1, 1);
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         playerRect = GetComponent<RectTransform>();
+        canvas = GameObject.Find("Canvas").GetComponent<RectTransform>();
         playerCollider = GetComponent<Collider2D>();
         semiCircleRect = semiCircle.GetComponent<RectTransform>();
         audioSource = GetComponent<AudioSource>();
@@ -77,8 +79,11 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             Vector2 mousePosition = Input.mousePosition;            //マウスの位置(画面左下が(0,0))
-            mousePosition.x -= Screen.width / 2;
-            mousePosition.y -= Screen.height / 2;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, mousePosition, Camera.main, out mousePosition))
+            {
+                mousePosition.x -= Screen.width / 2;
+                mousePosition.y -= Screen.height / 2;
+            }
             float deltaX = mousePosition.x - playerRect.anchoredPosition.x;
             float deltaY = mousePosition.y - playerRect.anchoredPosition.y;
             //自機の真上に手を置いている場合に振動しないように
